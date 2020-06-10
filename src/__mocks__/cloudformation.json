@@ -1,0 +1,18 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description": "Serverless sumologic example template",
+  "Parameters": {},
+  "Resources": {
+    "NotificationTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [
+          {
+            "Endpoint": "hi@hello.com",
+            "Protocol": "email"
+          }
+        ]
+      }
+    }
+  }
+}

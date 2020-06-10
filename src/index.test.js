@@ -5,6 +5,6 @@ describe('#SumologicPlugin', () => {
     const config = {};
     const plugin = PluginFactory(config);
 
-    expect(Object.keys(plugin.hooks)).toEqual(['package:compileEvents']);
+    expect(Object.keys(plugin.hooks)).toEqual(['before:deploy:deploy']);
   });
 });

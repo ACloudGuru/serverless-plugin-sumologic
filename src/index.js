@@ -1,23 +1,21 @@
-const { format } = require('util');
-
-const message = {
-  CLI_START: 'Serverless Sumologic Plugin:',
-  CLI_SKIP: 'Skipping serverless sumologic plugin: %s!',
-};
+const { beforeDeploy } = require('./hooks/beforeDeploy');
 
 class ServerlessSumologicPlugin {
-  constructor(serverless) {
-    this.serverless = serverless;
+  constructor(serverless, options) {
+    this.commands = {
+      deploy: {
+        commands: {
+          sumologic: {
+            usage: 'Deploy sumologic stack',
+            lifecycleEvents: ['deploy'],
+          },
+        },
+      },
+    };
 
     this.hooks = {
-      'package:compileEvents': this.beforeDeployResources.bind(this),
+      'before:deploy:deploy': beforeDeploy({ serverless, options }),
     };
-  }
-
-  beforeDeployResources() {
-    return Promise.resolve()
-      .then(() => this.serverless.cli.log(format(message.CLI_START)))
-      .catch(err => this.serverless.cli.log(format(message.CLI_SKIP, err.message)));
   }
 }
 
