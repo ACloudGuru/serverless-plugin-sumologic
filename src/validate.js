@@ -10,6 +10,8 @@ const validate = ({ serverless }) => {
 
   assert(serverless.service.custom, message.NO_SUMOLOGIC_CONFIG);
   assert(serverless.service.custom.sumologic, message.NO_SUMOLOGIC_CONFIG);
+  assert(serverless.service.custom.sumologic.name, message.NO_SUMOLOGIC_NAME);
+  assert(serverless.service.custom.sumologic.endpointUrl, message.NO_SUMOLOGIC_ENDPOINT_URL);
 };
 
 module.exports = { validate };
