@@ -2,8 +2,11 @@ const { getConfig } = require('./getConfig');
 
 describe('#getConfig', () => {
   it('should get the default config', () => {
-    const userConfig = { endpointUrl: 'http://sumologic-endpoint' };
-    const options = { stage: 'test' };
+    const userConfig = {
+      endpointUrl: 'http://sumologic-endpoint',
+      name: 'my-service',
+    };
+    const options = { stage: 'test', region: 'east' };
 
     const serverless = {
       service: {
@@ -18,6 +21,8 @@ describe('#getConfig', () => {
     expect(config).toEqual({
       endpointUrl: userConfig.endpointUrl,
       includeLogGroupInfo: false,
+      name: 'sumologic-logs-my-service',
+      region: 'east',
       stage: 'test',
     });
   });
@@ -26,12 +31,14 @@ describe('#getConfig', () => {
     const userConfig = {
       endpointUrl: 'http://sumologic-endpoint',
       includeLogGroupInfo: true,
+      name: 'my-service',
     };
 
     const options = { stage: 'test' };
 
     const serverless = {
       service: {
+        provider: { region: 'east' },
         custom: {
           sumologic: userConfig,
         },
@@ -40,13 +47,24 @@ describe('#getConfig', () => {
 
     const config = getConfig({ serverless, options });
 
-    expect(config).toEqual({ ...userConfig, stage: 'test' });
+    expect(config).toEqual({
+      ...userConfig,
+      stage: 'test',
+      name: 'sumologic-logs-my-service',
+      region: 'east',
+    });
   });
 
   it('should throw error if stage is undefined', () => {
     const config = () => getConfig({ serverless: {}, options: {} });
 
-    expect(config).toThrow(new Error('Run serverless with --stage flag!'));
+    expect(config).toThrow(new Error('Serverless "stage" is missing'));
+  });
+
+  it('should throw error if region is undefined', () => {
+    const config = () => getConfig({ serverless: {}, options: { stage: 'test' } });
+
+    expect(config).toThrow(new Error('Serverless "region" is missing'));
   });
 
   it('should set stage from aws provider', () => {
@@ -60,6 +78,7 @@ describe('#getConfig', () => {
     const serverless = {
       service: {
         provider: {
+          region: 'east',
           stage: 'test',
         },
         custom: {
@@ -70,7 +89,7 @@ describe('#getConfig', () => {
 
     const config = getConfig({ serverless, options });
 
-    expect(config).toEqual({ ...userConfig, stage: 'test' });
+    expect(config.stage).toEqual('test');
   });
 
   it('should prioritize stage from options', () => {
@@ -84,6 +103,7 @@ describe('#getConfig', () => {
     const serverless = {
       service: {
         provider: {
+          region: 'east',
           stage: 'test',
         },
         custom: {
@@ -94,6 +114,6 @@ describe('#getConfig', () => {
 
     const config = getConfig({ serverless, options });
 
-    expect(config).toEqual({ ...userConfig, stage: 'test' });
+    expect(config.stage).toEqual('test');
   });
 });
