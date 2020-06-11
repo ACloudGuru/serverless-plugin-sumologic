@@ -10,10 +10,12 @@ const beforeDeploy = ({ serverless, options }) => {
     .then(() => validate({ serverless }))
     .then(() => serverless.cli.log(format(message.CLI_START)))
     .then(() => getConfig({ serverless, options }))
-    .then(config => generateTemplate({ config }))
-    .then(template => deployStack({ template }))
+    .then(config => ({ serverless, config, template: generateTemplate({ config }) }))
+    .then(deployStack)
     .then(() => serverless.cli.log(format(message.CLI_DONE)))
-    .catch(err => serverless.cli.log(format(message.CLI_SKIP, err.message)));
+    .catch(err => {
+      throw new Error(format(message.CLI_SKIP, err.message));
+    });
 };
 
 module.exports = { beforeDeploy };
