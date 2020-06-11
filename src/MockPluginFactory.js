@@ -8,10 +8,12 @@ const PluginFactory = (config, env) => {
       log: console.log,
     },
     service: {
-      custom: { config },
+      custom: { sumologic: config },
       getServiceName: () => this.service,
       provider: {
         name: 'aws',
+        stage: 'test',
+        region: 'east',
         compiledCloudFormationTemplate: {
           Resources: {},
         },
@@ -20,6 +22,7 @@ const PluginFactory = (config, env) => {
     },
     getProvider: () => {
       return {
+        provider: { request: () => Promise.resolve({}) },
         getRegion: () => 'fooregion',
         getStage: () => stage,
       };
