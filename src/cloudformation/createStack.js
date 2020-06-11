@@ -1,5 +1,7 @@
-const createStack = ({ provider, template, config, parameters }) => {
-  const { name, stage, region } = config;
+const { waitForStack } = require('./waitForStack');
+
+const createStack = async ({ provider, template, config, parameters }) => {
+  const { region, name } = config;
 
   const params = {
     StackName: name,
@@ -9,13 +11,9 @@ const createStack = ({ provider, template, config, parameters }) => {
     TemplateBody: JSON.stringify(template),
   };
 
-  return provider.request(
-    'CloudFormation',
-    'createStack',
-    params,
-    stage,
-    region
-  );
+  await provider.request('CloudFormation', 'createStack', params, { region });
+
+  return waitForStack({ provider, config });
 };
 
 module.exports = { createStack };

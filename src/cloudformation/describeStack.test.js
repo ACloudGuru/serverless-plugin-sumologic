@@ -25,8 +25,7 @@ describe('#describeStack', () => {
       'CloudFormation',
       'describeStacks',
       { StackName: 'stack-name' },
-      'test',
-      'east'
+      { region: 'east' }
     );
   });
 
