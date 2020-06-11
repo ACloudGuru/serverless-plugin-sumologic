@@ -5,7 +5,8 @@ const { Parameters } = require('./parameters');
 const generateTemplate = ({ config }) => {
   const template = {
     AWSTemplateFormatVersion: '2010-09-09',
-    Description: 'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
+    Description:
+      'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
     Parameters,
     Mappings,
     Resources: undefined,
