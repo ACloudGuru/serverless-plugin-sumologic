@@ -20,7 +20,7 @@ describe('#createStack', () => {
     expect(request).toHaveBeenCalledWith(
       'CloudFormation',
       'createStack',
-      { ...params, onFailure: 'ROLLBACK' },
+      { ...params, OnFailure: 'ROLLBACK' },
       { region: 'east' }
     );
   });
