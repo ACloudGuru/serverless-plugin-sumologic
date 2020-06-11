@@ -1,21 +1,25 @@
 const { format } = require('util');
 const { validate } = require('../validate');
-const { message } = require('../message');
+const { MESSAGE } = require('../message');
 const { getConfig } = require('../getConfig');
 const { generateTemplate } = require('../template/generateTemplate');
 const { deployStack } = require('../cloudformation/deployStack');
 
-const beforeDeploy = ({ serverless, options }) => {
-  return Promise.resolve()
-    .then(() => validate({ serverless }))
-    .then(() => serverless.cli.log(format(message.CLI_START)))
-    .then(() => getConfig({ serverless, options }))
-    .then(config => ({ serverless, config, template: generateTemplate({ config }) }))
-    .then(deployStack)
-    .then(() => serverless.cli.log(format(message.CLI_DONE)))
-    .catch(err => {
-      throw new Error(format(message.CLI_SKIP, err.message));
-    });
-};
+const beforeDeploy = async ({ serverless, options }) => {
+  try {
+    validate({ serverless });
 
+    const config = getConfig({ serverless, options });
+
+    serverless.cli.log(format(config.prefix, MESSAGE.CLI_START));
+
+    const template = generateTemplate({ config });
+
+    await deployStack({ serverless, config, template });
+
+    serverless.cli.log(format(config.prefix, MESSAGE.CLI_DONE));
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
 module.exports = { beforeDeploy };

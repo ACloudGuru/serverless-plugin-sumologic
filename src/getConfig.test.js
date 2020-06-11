@@ -23,6 +23,7 @@ describe('#getConfig', () => {
       includeLogGroupInfo: false,
       name: 'sumologic-logs-my-service',
       region: 'east',
+      prefix: 'Sumologic:',
       stage: 'test',
     });
   });
@@ -51,6 +52,7 @@ describe('#getConfig', () => {
       ...userConfig,
       stage: 'test',
       name: 'sumologic-logs-my-service',
+      prefix: 'Sumologic:',
       region: 'east',
     });
   });
