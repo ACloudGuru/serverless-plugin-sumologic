@@ -9,7 +9,6 @@ const deployStack = async ({ provider, config, template }) => {
 
   const params = {
     StackName: name,
-    OnFailure: 'ROLLBACK',
     Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM'],
     Parameters: [
       { ParameterKey: 'Stage', ParameterValue: stage },
