@@ -1,11 +1,13 @@
 const describeStack = async ({ provider, config }) => {
+  const { name, stage, region } = config;
+
   try {
     const response = await provider.request(
       'CloudFormation',
       'describeStacks',
-      { StackName: config.name },
-      config.stage,
-      config.region
+      { StackName: name },
+      stage,
+      region
     );
 
     return response.Stacks && response.Stacks[0];

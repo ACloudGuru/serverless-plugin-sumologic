@@ -9,7 +9,15 @@ const generateTemplate = ({ config }) => {
       'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
     Parameters,
     Mappings,
-    Resources: undefined,
+    Resources: {
+      SumoCWLogGroup: {
+        Type: 'AWS::Logs::LogGroup',
+        Properties: {
+          LogGroupName: 'SumoCWLogGroup',
+          RetentionInDays: 7,
+        },
+      },
+    },
     Outputs,
   };
 
