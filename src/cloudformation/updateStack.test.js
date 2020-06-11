@@ -1,3 +1,8 @@
+const mockWaitForStack = jest.fn();
+jest.mock('./waitForStack', () => ({
+  waitForStack: mockWaitForStack,
+}));
+
 const { updateStack } = require('./updateStack');
 
 const request = jest.fn();
@@ -9,7 +14,8 @@ const params = {
 
 describe('#updateStack', () => {
   it('should update the stack', async () => {
-    request.mockResolvedValue('response');
+    mockWaitForStack.mockResolvedValue('response');
+    request.mockResolvedValue();
     const stack = await updateStack({
       provider,
       params,
@@ -23,6 +29,11 @@ describe('#updateStack', () => {
       params,
       { region: 'east' }
     );
+    expect(mockWaitForStack).toHaveBeenCalledWith({
+      provider,
+      name: 'stack-name',
+      region: 'east',
+    });
   });
 
   it('should return null if stack does not have updates', async () => {

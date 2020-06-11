@@ -8,6 +8,6 @@ const createStack = async ({ provider, params, region }) =>
       { ...params, OnFailure: 'DELETE' },
       { region }
     )
-    .then(() => waitForStack({ provider, name: params.stackName, region }));
+    .then(() => waitForStack({ provider, name: params.StackName, region }));
 
 module.exports = { createStack };

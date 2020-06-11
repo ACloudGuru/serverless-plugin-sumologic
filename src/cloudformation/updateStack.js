@@ -5,7 +5,7 @@ const updateStack = ({ provider, params, region }) =>
     .request('CloudFormation', 'updateStack', params, {
       region,
     })
-    .then(() => waitForStack({ provider, name: params.stackName, region }))
+    .then(() => waitForStack({ provider, name: params.StackName, region }))
     .catch(err => {
       if (err.message && err.message.match(/^No updates/)) {
         return null;
