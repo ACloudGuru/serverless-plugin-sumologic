@@ -1,25 +1,32 @@
 const { describeStack } = require('./describeStack');
 const { createStack } = require('./createStack');
+const { updateStack } = require('./updateStack');
 
-const deployStack = async ({ serverless, config, template }) => {
-  const { provider } = serverless.getProvider('aws');
+const deployStack = async ({ provider, config, template }) => {
+  const { name, region, stage, endpointUrl, includeLogGroupInfo } = config;
 
-  const { stage, endpointUrl, includeLogGroupInfo } = config;
+  const stack = await describeStack({ provider, name, region });
 
-  const stack = await describeStack({ provider, config });
-
-  const parameters = [
-    { ParameterKey: 'Stage', ParameterValue: stage },
-    { ParameterKey: 'SumoEndPointURL', ParameterValue: endpointUrl },
-    {
-      ParameterKey: 'SumoIncludeLogGroupInfo',
-      ParameterValue: includeLogGroupInfo.toString(),
-    },
-  ];
+  const params = {
+    StackName: name,
+    OnFailure: 'ROLLBACK',
+    Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM'],
+    Parameters: [
+      { ParameterKey: 'Stage', ParameterValue: stage },
+      { ParameterKey: 'SumoEndPointURL', ParameterValue: endpointUrl },
+      {
+        ParameterKey: 'SumoIncludeLogGroupInfo',
+        ParameterValue: includeLogGroupInfo.toString(),
+      },
+    ],
+    TemplateBody: JSON.stringify(template),
+  };
 
   if (!stack) {
-    await createStack({ provider, template, config, parameters });
+    return createStack({ provider, params, region });
   }
+
+  return updateStack({ provider, params, region });
 };
 
 module.exports = { deployStack };

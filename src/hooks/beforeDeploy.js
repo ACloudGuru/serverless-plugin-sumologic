@@ -15,7 +15,8 @@ const beforeDeploy = async ({ serverless, options }) => {
 
     const template = generateTemplate({ config });
 
-    await deployStack({ serverless, config, template });
+    const { provider } = serverless.getProvider('aws');
+    await deployStack({ provider, config, template });
 
     serverless.cli.log(format(config.prefix, MESSAGE.CLI_DONE));
   } catch (err) {
