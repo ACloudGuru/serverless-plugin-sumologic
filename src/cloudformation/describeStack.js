@@ -1,5 +1,5 @@
-const describeStack = ({ provider }) => ({ name, region }) => {
-  return provider
+const describeStack = ({ provider }) => ({ name, region }) =>
+  provider
     .request(
       'CloudFormation',
       'describeStacks',
@@ -14,6 +14,5 @@ const describeStack = ({ provider }) => ({ name, region }) => {
 
       throw err;
     });
-};
 
 module.exports = { describeStack };
