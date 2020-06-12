@@ -53,7 +53,7 @@ const waitForStack = ({ describeStack, timeout = 5000 }) => ({
     }
 
     throw new Error(
-      'Unknown error with the stack. Check Cloudfromation console for details.'
+      'Unknown error with the stack. Check loudfromation console for details.'
     );
   };
 
