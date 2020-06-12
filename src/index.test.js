@@ -40,10 +40,13 @@ describe('#SumologicPlugin', () => {
       endpointUrl: 'endpoint-url',
     });
 
-    expect(Object.keys(plugin.hooks)).toEqual(['before:deploy:deploy']);
+    expect(Object.keys(plugin.hooks)).toEqual([
+      'deploy:sumologic:deploy',
+      'before:deploy:deploy',
+    ]);
   });
 
-  describe('#beforeDeploy', () => {
+  describe('#deploy', () => {
     let plugin;
 
     beforeEach(() => {
@@ -57,12 +60,12 @@ describe('#SumologicPlugin', () => {
 
     it('should validate plugin configuration', async () => {
       const spy = jest.spyOn(plugin, 'validate');
-      await plugin.beforeDeploy();
+      await plugin.deploy();
       expect(spy).toHaveBeenCalled();
     });
 
     it('should generate template', async () => {
-      await plugin.beforeDeploy();
+      await plugin.deploy();
       expect(mockGenerateTemplate).toHaveBeenCalledWith({
         config: {
           endpointUrl: 'endpoint-url',
@@ -77,7 +80,7 @@ describe('#SumologicPlugin', () => {
     it('should deploy sumologic stack', async () => {
       mockGenerateTemplate.mockReturnValue('template');
       const spy = jest.spyOn(plugin.cloudformation, 'deploy');
-      await plugin.beforeDeploy();
+      await plugin.deploy();
       expect(spy).toHaveBeenCalledWith({
         config: {
           endpointUrl: 'endpoint-url',
@@ -94,7 +97,7 @@ describe('#SumologicPlugin', () => {
       const spy = jest.spyOn(plugin, 'validate');
       spy.mockRejectedValue(new Error('cannot generate template'));
       return plugin
-        .beforeDeploy()
+        .deploy()
         .then(() => expect(false).toBeTruthy())
         .catch(err => expect(err).toEqual('cannot generate template'));
     });
