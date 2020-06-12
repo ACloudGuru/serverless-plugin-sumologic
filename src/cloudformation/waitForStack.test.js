@@ -35,4 +35,17 @@ describe('#waitForStack', () => {
     });
     expect(describeStack).toHaveBeenCalledTimes(3);
   });
+
+  it('should handle unknown errors', async () => {
+    describeStack.mockResolvedValueOnce({
+      StackStatus: 'UNKNOWN_ERROR',
+    });
+
+    const wait = waitForStack({ describeStack, timeout: 0 });
+    const func = () => wait({ name: 'stack-name', region: 'east' });
+
+    await expect(func).rejects.toThrow(
+      'Unknown error with the stack. Check Cloudfromation console for details.'
+    );
+  });
 });
