@@ -1,5 +1,5 @@
 const { Mappings } = require('./mappings');
-const { Outputs } = require('./outputs');
+const { getOutputs } = require('./getOutputs');
 const { Parameters } = require('./parameters');
 const { getResources } = require('./getResources');
 const { toCamelCase } = require('../util');
@@ -11,7 +11,7 @@ const generateTemplate = ({ config }) => ({
   Parameters,
   Mappings,
   Resources: getResources({ ...config, prefix: toCamelCase(config.name) }),
-  Outputs,
+  Outputs: getOutputs({ prefix: toCamelCase(config.name) }),
 });
 
 module.exports = { generateTemplate };
