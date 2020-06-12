@@ -38,7 +38,8 @@ class ServerlessSumologicPlugin {
   }
 
   beforeDeploy() {
-    return Promise.resolve(this.validate)
+    return Promise.resolve()
+      .then(() => this.validate())
       .then(() => this.logger.log(MESSAGE.CLI_START))
       .then(() => generateTemplate({ config: this.config }))
       .then(template =>
