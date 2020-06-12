@@ -46,9 +46,15 @@ const waitForStack = ({ describeStack, timeout = 5000 }) => ({
       throw new Error('Stack status check failed');
     }
 
+    if (STATUS_CODES[stack.StackStatus] === SUCCESS) {
+      return true;
+    }
+
     console.log(); // finish printing dots and start rest of the logs in new line
 
-    return true;
+    throw new Error(
+      'Unknown error with the stack. Check Cloudfromation console for details.'
+    );
   };
 
   return checkStatus();
