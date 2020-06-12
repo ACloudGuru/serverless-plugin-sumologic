@@ -7,6 +7,9 @@ const MESSAGE = {
   NO_SUMOLOGIC_NAME: '%s: configuration missing - custom.sumologic.name',
   NO_SUMOLOGIC_ENDPOINT_URL:
     '%s: configuration missing - custom.sumologic.endpointUrl',
+  STACK_UPDATE: 'Stack "%s" already exists. Updating...',
+  STACK_CREATE: 'Creating stack "%s"...',
+  STACK_NO_CHANGE: 'Stack is up to date.',
 };
 
 module.exports = { MESSAGE };

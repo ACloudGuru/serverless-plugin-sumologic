@@ -9,11 +9,17 @@ class ServerlessSumologicPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-    this.logger = this.serverless.cli;
-
-    this.config = getConfig({ serverless, options });
     this.provider = serverless.getProvider('aws');
-    this.cloudformation = Cloudformation({ provider: this.provider });
+    this.config = getConfig({ serverless, options });
+
+    this.logger = {
+      log: msg => this.serverless.cli.log(format(this.config.prefix, msg)),
+    };
+
+    this.cloudformation = Cloudformation({
+      provider: this.provider,
+      logger: this.logger,
+    });
 
     this.commands = {
       deploy: {
@@ -33,14 +39,12 @@ class ServerlessSumologicPlugin {
 
   beforeDeploy() {
     return Promise.resolve(this.validate)
-      .then(() =>
-        this.logger.log(format(this.config.prefix, MESSAGE.CLI_START))
-      )
+      .then(() => this.logger.log(MESSAGE.CLI_START))
       .then(() => generateTemplate({ config: this.config }))
       .then(template =>
         this.cloudformation.deploy({ config: this.config, template })
       )
-      .then(() => this.logger.log(format(this.config.prefix, MESSAGE.CLI_DONE)))
+      .then(() => this.logger.log(MESSAGE.CLI_DONE))
       .catch(err => Promise.reject(err.message));
   }
 
