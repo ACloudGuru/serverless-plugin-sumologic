@@ -1,11 +1,15 @@
-const { describeStack } = require('./describeStack');
-const { createStack } = require('./createStack');
-const { updateStack } = require('./updateStack');
+const { format } = require('util');
+const { MESSAGE } = require('../message');
 
-const deployStack = async ({ provider, config, template }) => {
+const deployStack = ({
+  logger,
+  describeStack,
+  createStack,
+  updateStack,
+}) => async ({ config, template }) => {
   const { name, region, stage, endpointUrl, includeLogGroupInfo } = config;
 
-  const stack = await describeStack({ provider, name, region });
+  const stack = await describeStack({ name, region });
 
   const params = {
     StackName: name,
@@ -21,11 +25,13 @@ const deployStack = async ({ provider, config, template }) => {
     TemplateBody: JSON.stringify(template),
   };
 
-  if (!stack) {
-    return createStack({ provider, params, region });
+  if (stack) {
+    logger.log(format(MESSAGE.STACK_UPDATE, name));
+    return updateStack({ params, region });
   }
 
-  return updateStack({ provider, params, region });
+  logger.log(format(MESSAGE.STACK_CREATE, name));
+  return createStack({ params, region });
 };
 
 module.exports = { deployStack };

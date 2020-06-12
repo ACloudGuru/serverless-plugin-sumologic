@@ -1,12 +1,10 @@
-const mockWaitForStack = jest.fn();
-jest.mock('./waitForStack', () => ({
-  waitForStack: mockWaitForStack,
-}));
-
 const { updateStack } = require('./updateStack');
+
+const waitForStack = jest.fn();
 
 const request = jest.fn();
 const provider = { request };
+const logger = { log: jest.fn() };
 
 const params = {
   StackName: 'stack-name',
@@ -14,10 +12,13 @@ const params = {
 
 describe('#updateStack', () => {
   it('should update the stack', async () => {
-    mockWaitForStack.mockResolvedValue('response');
+    waitForStack.mockResolvedValue('response');
     request.mockResolvedValue();
-    const stack = await updateStack({
-      provider,
+
+    const update = updateStack({ logger, provider, waitForStack });
+
+    const stack = await update({
+      request,
       params,
       region: 'east',
     });
@@ -29,8 +30,7 @@ describe('#updateStack', () => {
       params,
       { region: 'east' }
     );
-    expect(mockWaitForStack).toHaveBeenCalledWith({
-      provider,
+    expect(waitForStack).toHaveBeenCalledWith({
       name: 'stack-name',
       region: 'east',
     });
@@ -38,19 +38,22 @@ describe('#updateStack', () => {
 
   it('should return null if stack does not have updates', async () => {
     request.mockRejectedValue(new Error('No updates'));
-    const stack = await updateStack({
-      provider,
+
+    const update = updateStack({ logger, provider, waitForStack });
+    const stack = await update({
       params,
       region: 'east',
     });
 
     expect(stack).toBeNull();
+    expect(logger.log).toHaveBeenCalledWith('Stack is up to date.');
   });
 
   it('should escalate error', async () => {
     request.mockRejectedValue(new Error('something went wrong'));
-    const stack = updateStack({
-      provider,
+
+    const update = updateStack({ logger, provider, waitForStack });
+    const stack = update({
       name: 'stack-name',
       region: 'east',
     });

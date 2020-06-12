@@ -1,5 +1,3 @@
-const { describeStack } = require('./describeStack');
-
 const IN_PROGRESS = 'in_progress';
 const FAILURE = 'failure';
 const SUCCESS = 'success';
@@ -24,11 +22,12 @@ const STATUS_CODES = {
   UPDATE_ROLLBACK_IN_PROGRESS: IN_PROGRESS,
 };
 
-const TIMEOUT = 1000;
-
-const waitForStack = ({ provider, name, region }) => {
+const waitForStack = ({ describeStack, timeout = 5000 }) => ({
+  name,
+  region,
+}) => {
   const checkStatus = async () => {
-    const stack = await describeStack({ provider, name, region });
+    const stack = await describeStack({ name, region });
 
     if (!stack) {
       return false;
@@ -37,15 +36,17 @@ const waitForStack = ({ provider, name, region }) => {
     const state = STATUS_CODES[stack.StackStatus];
 
     if (state === IN_PROGRESS) {
-      await new Promise(resolve => setTimeout(resolve, TIMEOUT)).then(
+      process.stdout.write('.');
+      return new Promise(resolve => setTimeout(resolve, timeout)).then(
         checkStatus
       );
-      return checkStatus();
     }
 
     if (STATUS_CODES[stack.StackStatus] === FAILURE) {
       throw new Error('Stack status check failed');
     }
+
+    console.log(); // finish printing dots and start rest of the logs in new line
 
     return true;
   };

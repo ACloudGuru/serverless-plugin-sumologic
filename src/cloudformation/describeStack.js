@@ -1,4 +1,4 @@
-const describeStack = async ({ provider, name, region }) =>
+const describeStack = ({ provider }) => ({ name, region }) =>
   provider
     .request(
       'CloudFormation',
