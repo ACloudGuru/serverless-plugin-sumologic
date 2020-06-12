@@ -62,4 +62,4 @@ functions:
 ```
 
 ## License
-Feel free to use the code, it's released using the [MIT license](https://github.com/ACloudGuru/serverless-plugin-sumologic/blob/master/LICENSE.md).
+Feel free to use the code, it's released using the [MIT license](https://github.com/ACloudGuru/serverless-plugin-sumologic/blob/master/LICENSE).
