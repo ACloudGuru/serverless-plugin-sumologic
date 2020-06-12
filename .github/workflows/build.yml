@@ -1,6 +1,6 @@
 name: Build
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,10 +13,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
+
       - run: yarn test
+
       - run: yarn lint
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.COVERALLS_GITHUB_TOKEN }}
