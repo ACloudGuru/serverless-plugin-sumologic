@@ -7,13 +7,12 @@ const mockStack = {
 };
 
 const request = jest.fn();
-const provider = { request };
 
 describe('#describeStack', () => {
   it('should get the stack information', async () => {
     request.mockResolvedValue({ Stacks: [mockStack] });
     const stack = await describeStack({
-      provider,
+      request,
       name: 'stack-name',
       region: 'east',
     });
@@ -30,7 +29,7 @@ describe('#describeStack', () => {
   it('should return null if stack is not found', async () => {
     request.mockRejectedValue(new Error('this stack does not exist'));
     const stack = await describeStack({
-      provider,
+      request,
       name: 'stack-name',
       region: 'east',
     });
@@ -41,7 +40,7 @@ describe('#describeStack', () => {
   it('should escalate error', async () => {
     request.mockRejectedValue(new Error('something went wrong'));
     const stack = describeStack({
-      provider,
+      request,
       name: 'stack-name',
       region: 'east',
     });

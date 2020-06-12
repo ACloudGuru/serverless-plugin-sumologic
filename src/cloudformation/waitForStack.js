@@ -26,9 +26,9 @@ const STATUS_CODES = {
 
 const TIMEOUT = 1000;
 
-const waitForStack = ({ provider, name, region }) => {
+const waitForStack = ({ request, name, region }) => {
   const checkStatus = async () => {
-    const stack = await describeStack({ provider, name, region });
+    const stack = await describeStack({ request, name, region });
 
     if (!stack) {
       return false;

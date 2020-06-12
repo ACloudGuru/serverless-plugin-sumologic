@@ -13,6 +13,7 @@ class ServerlessSumologicPlugin {
 
     this.config = getConfig({ serverless, options });
     this.provider = serverless.getProvider('aws');
+    this.request = this.provider.request;
 
     this.commands = {
       deploy: {
@@ -37,7 +38,7 @@ class ServerlessSumologicPlugin {
       )
       .then(() => generateTemplate({ config: this.config }))
       .then(template =>
-        deployStack({ provider: this.provider, config: this.config, template })
+        deployStack({ request: this.request, config: this.config, template })
       )
       .then(() => this.logger.log(format(this.config.prefix, MESSAGE.CLI_DONE)))
       .catch(err => Promise.reject(err.message));

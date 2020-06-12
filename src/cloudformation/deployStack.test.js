@@ -11,7 +11,6 @@ jest.mock('./updateStack', () => ({
 const { deployStack } = require('./deployStack');
 
 const request = jest.fn();
-const provider = { request };
 
 const config = {
   name: 'stack-name',
@@ -29,7 +28,7 @@ describe('#deployStack', () => {
     mockCreateStack.mockResolvedValue('response');
 
     const stack = await deployStack({
-      provider,
+      request,
       config,
       template: 'template',
     });
@@ -54,7 +53,7 @@ describe('#deployStack', () => {
     expect(stack).toEqual('response');
     expect(mockUpdateStack).not.toHaveBeenCalled();
     expect(mockCreateStack).toHaveBeenCalledWith({
-      provider,
+      request,
       params,
       region: 'east',
     });
@@ -65,7 +64,7 @@ describe('#deployStack', () => {
     mockUpdateStack.mockResolvedValue('response');
 
     const stack = await deployStack({
-      provider,
+      request,
       config,
       template: 'template',
     });
@@ -89,7 +88,7 @@ describe('#deployStack', () => {
 
     expect(stack).toEqual('response');
     expect(mockUpdateStack).toHaveBeenCalledWith({
-      provider,
+      request,
       params,
       region: 'east',
     });
