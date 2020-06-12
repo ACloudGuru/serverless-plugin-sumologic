@@ -6,8 +6,8 @@ const MESSAGE = {
   ONLY_AWS_SUPPORT: 'Only supported for AWS provider',
   NO_SUMOLOGIC_NAME: 'Config missing - custom.sumologic.name',
   NO_SUMOLOGIC_ENDPOINT_URL: 'Config missing - custom.sumologic.endpointUrl',
-  STACK_UPDATE: 'Stack "%s" already exists. Updating...',
-  STACK_CREATE: 'Creating stack "%s"...',
+  STACK_UPDATE: 'Stack %s already exists. Updating...',
+  STACK_CREATE: 'Creating stack %s...',
   STACK_NO_CHANGE: 'Stack is up to date.',
 };
 

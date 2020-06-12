@@ -3,6 +3,7 @@ const { deployStack } = require('./deployStack');
 const createStack = jest.fn();
 const updateStack = jest.fn();
 const describeStack = jest.fn();
+const logger = { log: jest.fn() };
 
 const config = {
   name: 'stack-name',
@@ -19,7 +20,12 @@ describe('#deployStack', () => {
     describeStack.mockResolvedValue(null);
     createStack.mockResolvedValue('response');
 
-    const deploy = deployStack({ createStack, updateStack, describeStack });
+    const deploy = deployStack({
+      logger,
+      createStack,
+      updateStack,
+      describeStack,
+    });
 
     const stack = await deploy({
       config,
@@ -45,6 +51,7 @@ describe('#deployStack', () => {
 
     expect(stack).toEqual('response');
     expect(updateStack).not.toHaveBeenCalled();
+    expect(logger.log).toHaveBeenCalledWith('Creating stack stack-name...');
     expect(createStack).toHaveBeenCalledWith({
       params,
       region: 'east',
@@ -55,7 +62,12 @@ describe('#deployStack', () => {
     describeStack.mockResolvedValue('stack');
     updateStack.mockResolvedValue('response');
 
-    const deploy = deployStack({ createStack, updateStack, describeStack });
+    const deploy = deployStack({
+      logger,
+      createStack,
+      updateStack,
+      describeStack,
+    });
 
     const stack = await deploy({
       config,
@@ -80,6 +92,9 @@ describe('#deployStack', () => {
     };
 
     expect(stack).toEqual('response');
+    expect(logger.log).toHaveBeenCalledWith(
+      'Stack stack-name already exists. Updating...'
+    );
     expect(updateStack).toHaveBeenCalledWith({
       params,
       region: 'east',
