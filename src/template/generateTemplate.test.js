@@ -1,3 +1,8 @@
+const mockGetResources = jest.fn();
+jest.mock('./getResources', () => ({
+  getResources: mockGetResources,
+}));
+
 const { generateTemplate } = require('./generateTemplate');
 const { Mappings } = require('./mappings');
 const { Outputs } = require('./outputs');
@@ -5,7 +10,8 @@ const { Parameters } = require('./parameters');
 
 describe('#getConfig', () => {
   it('should generate cloudformation template', () => {
-    const config = {};
+    mockGetResources.mockReturnValue('resources');
+    const config = { stage: 'test' };
     const template = generateTemplate({ config });
 
     expect(template).toEqual({
@@ -14,16 +20,9 @@ describe('#getConfig', () => {
         'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
       Parameters,
       Mappings,
-      Resources: {
-        SumoCWLogGroup: {
-          Type: 'AWS::Logs::LogGroup',
-          Properties: {
-            LogGroupName: 'SumoCWLogGroup',
-            RetentionInDays: 7,
-          },
-        },
-      },
+      Resources: 'resources',
       Outputs,
     });
+    expect(mockGetResources).toHaveBeenCalledWith({ stage: 'test' });
   });
 });
