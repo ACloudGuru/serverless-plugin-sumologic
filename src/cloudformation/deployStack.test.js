@@ -1,16 +1,8 @@
-const mockCreateStack = jest.fn();
-const mockUpdateStack = jest.fn();
-
-jest.mock('./createStack', () => ({
-  createStack: mockCreateStack,
-}));
-jest.mock('./updateStack', () => ({
-  updateStack: mockUpdateStack,
-}));
-
 const { deployStack } = require('./deployStack');
 
-const request = jest.fn();
+const createStack = jest.fn();
+const updateStack = jest.fn();
+const describeStack = jest.fn();
 
 const config = {
   name: 'stack-name',
@@ -24,11 +16,12 @@ describe('#deployStack', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should create the stack if it does not exist', async () => {
-    request.mockResolvedValue({ Stacks: [] });
-    mockCreateStack.mockResolvedValue('response');
+    describeStack.mockResolvedValue(null);
+    createStack.mockResolvedValue('response');
 
-    const stack = await deployStack({
-      request,
+    const deploy = deployStack({ createStack, updateStack, describeStack });
+
+    const stack = await deploy({
       config,
       template: 'template',
     });
@@ -51,20 +44,20 @@ describe('#deployStack', () => {
     };
 
     expect(stack).toEqual('response');
-    expect(mockUpdateStack).not.toHaveBeenCalled();
-    expect(mockCreateStack).toHaveBeenCalledWith({
-      request,
+    expect(updateStack).not.toHaveBeenCalled();
+    expect(createStack).toHaveBeenCalledWith({
       params,
       region: 'east',
     });
   });
 
   it('should update the stack if stack exists', async () => {
-    request.mockResolvedValue({ Stacks: ['stack'] });
-    mockUpdateStack.mockResolvedValue('response');
+    describeStack.mockResolvedValue('stack');
+    updateStack.mockResolvedValue('response');
 
-    const stack = await deployStack({
-      request,
+    const deploy = deployStack({ createStack, updateStack, describeStack });
+
+    const stack = await deploy({
       config,
       template: 'template',
     });
@@ -87,11 +80,10 @@ describe('#deployStack', () => {
     };
 
     expect(stack).toEqual('response');
-    expect(mockUpdateStack).toHaveBeenCalledWith({
-      request,
+    expect(updateStack).toHaveBeenCalledWith({
       params,
       region: 'east',
     });
-    expect(mockCreateStack).not.toHaveBeenCalled();
+    expect(createStack).not.toHaveBeenCalled();
   });
 });
