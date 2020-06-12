@@ -1,27 +1,16 @@
 const { Mappings } = require('./mappings');
 const { Outputs } = require('./outputs');
 const { Parameters } = require('./parameters');
+const { getResources } = require('./getResources');
 
-const generateTemplate = ({ config }) => {
-  const template = {
-    AWSTemplateFormatVersion: '2010-09-09',
-    Description:
-      'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
-    Parameters,
-    Mappings,
-    Resources: {
-      SumoCWLogGroup: {
-        Type: 'AWS::Logs::LogGroup',
-        Properties: {
-          LogGroupName: 'SumoCWLogGroup',
-          RetentionInDays: 7,
-        },
-      },
-    },
-    Outputs,
-  };
-
-  return template;
-};
+const generateTemplate = ({ config }) => ({
+  AWSTemplateFormatVersion: '2010-09-09',
+  Description:
+    'Cloudformation stack for streaming Cloudwatch logs to Sumologic',
+  Parameters,
+  Mappings,
+  Resources: getResources({ ...config }),
+  Outputs,
+});
 
 module.exports = { generateTemplate };
