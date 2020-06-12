@@ -22,9 +22,10 @@ const STATUS_CODES = {
   UPDATE_ROLLBACK_IN_PROGRESS: IN_PROGRESS,
 };
 
-const TIMEOUT = 1000;
-
-const waitForStack = ({ describeStack }) => ({ name, region }) => {
+const waitForStack = ({ describeStack, timeout = 5000 }) => ({
+  name,
+  region,
+}) => {
   const checkStatus = async () => {
     const stack = await describeStack({ name, region });
 
@@ -36,7 +37,7 @@ const waitForStack = ({ describeStack }) => ({ name, region }) => {
 
     if (state === IN_PROGRESS) {
       process.stdout.write('.');
-      return new Promise(resolve => setTimeout(resolve, TIMEOUT)).then(
+      return new Promise(resolve => setTimeout(resolve, timeout)).then(
         checkStatus
       );
     }
