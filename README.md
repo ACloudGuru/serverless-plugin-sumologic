@@ -15,7 +15,7 @@ $ yarn add --dev serverless-plugin-sumologic
 ```
 
 ## Usage
-1. Add the following configuration to your `serverless.yml`.
+Add the following configuration to your `serverless.yml`.
 
 ```
 plugins:
@@ -27,9 +27,11 @@ custom:
     endpointUrl: sumologic-http-endpoint
     includeLogGroupInfo: true
 ```
-2. Run `yarn sls deploy` to deploy your serverless stack.
+Run `yarn sls deploy` to deploy your serverless stack and sumologic stack.
 
-**Note:** You can also run `yarn sls deploy sumologic` to deploy just the sumologic stack without deploying your serverless stack.
+OR
+
+Run `yarn sls deploy sumologic` to deploy just the sumologic stack without deploying your serverless stack.
 
 ## Properties
 1. **name:** Required (Must be unique per account if you are deploying multiple stacks)
