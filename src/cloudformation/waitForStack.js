@@ -35,15 +35,17 @@ const waitForStack = ({ describeStack }) => ({ name, region }) => {
     const state = STATUS_CODES[stack.StackStatus];
 
     if (state === IN_PROGRESS) {
-      await new Promise(resolve => setTimeout(resolve, TIMEOUT)).then(
+      process.stdout.write('.');
+      return new Promise(resolve => setTimeout(resolve, TIMEOUT)).then(
         checkStatus
       );
-      return checkStatus();
     }
 
     if (STATUS_CODES[stack.StackStatus] === FAILURE) {
       throw new Error('Stack status check failed');
     }
+
+    console.log(); // finish printing dots and start rest of the logs in new line
 
     return true;
   };
