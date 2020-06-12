@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-sumologic",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "Serverless plugin to create sumologic stack",
   "main": "src/index.js",
   "repository": "https://github.com/ACloudGuru/a-cloud-guru/tree/master/packages/serverless-plugin-sumologic",
