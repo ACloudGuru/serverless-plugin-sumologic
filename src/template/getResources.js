@@ -1,4 +1,4 @@
-const getResources = ({ stage }) => ({
+const getResources = ({ name, stage }) => ({
   SumoCWLogGroup: {
     Type: 'AWS::Logs::LogGroup',
     Properties: {
@@ -177,7 +177,7 @@ const getResources = ({ stage }) => ({
     DependsOn: ['SumoCWLambdaExecutionRole', 'SumoCWDeadLetterQueue'],
     Properties: {
       FunctionName: {
-        'Fn::Sub': `sumologic-${stage}`,
+        'Fn::Sub': `sumologic-${name}-${stage}`,
       },
       Code: {
         S3Bucket: {
@@ -250,7 +250,7 @@ const getResources = ({ stage }) => ({
     DependsOn: ['SumoCWLambdaExecutionRole', 'SumoCWDeadLetterQueue'],
     Properties: {
       FunctionName: {
-        'Fn::Sub': `sumologic-DLQ-${stage}`,
+        'Fn::Sub': `sumologic-DLQ-${name}-${stage}`,
       },
       Code: {
         S3Bucket: {

@@ -1,8 +1,4 @@
 const Parameters = {
-  Stage: {
-    Description: 'Deployment Stage Name',
-    Type: 'String',
-  },
   SumoEndPointURL: {
     Type: 'String',
     Description: 'SUMO_ENDPOINT created while configuring HTTP Source',
