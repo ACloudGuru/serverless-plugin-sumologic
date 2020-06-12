@@ -1,11 +1,10 @@
-const { describeStack } = require('./describeStack');
-const { createStack } = require('./createStack');
-const { updateStack } = require('./updateStack');
-
-const deployStack = async ({ request, config, template }) => {
+const deployStack = ({ describeStack, createStack, updateStack }) => async ({
+  config,
+  template,
+}) => {
   const { name, region, stage, endpointUrl, includeLogGroupInfo } = config;
 
-  const stack = await describeStack({ request, name, region });
+  const stack = await describeStack({ name, region });
 
   const params = {
     StackName: name,
@@ -22,10 +21,10 @@ const deployStack = async ({ request, config, template }) => {
   };
 
   if (!stack) {
-    return createStack({ request, params, region });
+    return createStack({ params, region });
   }
 
-  return updateStack({ request, params, region });
+  return updateStack({ params, region });
 };
 
 module.exports = { deployStack };

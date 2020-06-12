@@ -1,5 +1,3 @@
-const { describeStack } = require('./describeStack');
-
 const IN_PROGRESS = 'in_progress';
 const FAILURE = 'failure';
 const SUCCESS = 'success';
@@ -26,9 +24,9 @@ const STATUS_CODES = {
 
 const TIMEOUT = 1000;
 
-const waitForStack = ({ request, name, region }) => {
+const waitForStack = ({ describeStack }) => ({ name, region }) => {
   const checkStatus = async () => {
-    const stack = await describeStack({ request, name, region });
+    const stack = await describeStack({ name, region });
 
     if (!stack) {
       return false;

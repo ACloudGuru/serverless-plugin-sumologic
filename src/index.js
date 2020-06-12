@@ -3,7 +3,7 @@ const { format } = require('util');
 const { MESSAGE } = require('./message');
 const { getConfig } = require('./getConfig');
 const { generateTemplate } = require('./template/generateTemplate');
-const { deployStack } = require('./cloudformation/deployStack');
+const { Cloudformation } = require('./cloudformation');
 
 class ServerlessSumologicPlugin {
   constructor(serverless, options) {
@@ -13,7 +13,7 @@ class ServerlessSumologicPlugin {
 
     this.config = getConfig({ serverless, options });
     this.provider = serverless.getProvider('aws');
-    this.request = this.provider.request;
+    this.cloudformation = Cloudformation({ provider: this.provider });
 
     this.commands = {
       deploy: {
@@ -38,7 +38,7 @@ class ServerlessSumologicPlugin {
       )
       .then(() => generateTemplate({ config: this.config }))
       .then(template =>
-        deployStack({ request: this.request, config: this.config, template })
+        this.cloudformation.deploy({ config: this.config, template })
       )
       .then(() => this.logger.log(format(this.config.prefix, MESSAGE.CLI_DONE)))
       .catch(err => Promise.reject(err.message));

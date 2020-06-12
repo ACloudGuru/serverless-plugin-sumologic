@@ -1,11 +1,11 @@
-const { waitForStack } = require('./waitForStack');
-
-const createStack = async ({ request, params, region }) =>
-  request(
-    'CloudFormation',
-    'createStack',
-    { ...params, OnFailure: 'DELETE' },
-    { region }
-  ).then(() => waitForStack({ request, name: params.StackName, region }));
+const createStack = ({ provider, waitForStack }) => ({ params, region }) =>
+  provider
+    .request(
+      'CloudFormation',
+      'createStack',
+      { ...params, OnFailure: 'DELETE' },
+      { region }
+    )
+    .then(() => waitForStack({ name: params.StackName, region }));
 
 module.exports = { createStack };
