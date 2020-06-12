@@ -29,12 +29,14 @@ custom:
 ```
 2. Run `yarn sls deploy` to deploy your serverless stack.
 
-Note: You can also run `yarn sls deploy sumologic` to deploy just the sumologic stack without deploying your serverless stack.
+**Note:** You can also run `yarn sls deploy sumologic` to deploy just the sumologic stack without deploying your serverless stack.
 
 ## Properties
-1. **name:** required (must be unique per account if you are deploying multiple stacks)
-2. **endpointUrl:** required (Sumologic HTTP endpoint)
-3. **includeLogGroupInfo:**: optional
+1. **name:** Required (Must be unique per account if you are deploying multiple stacks)
+2. **endpointUrl:** Required (Sumologic HTTP endpoint)
+3. **includeLogGroupInfo:**: Optional
+
+**Note:** Camelcase version of property `name` is used to prefix all stack resource logical ids and output variables.
 
 ## Example Serverless Configuration
 ```
