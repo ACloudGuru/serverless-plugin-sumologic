@@ -13,7 +13,7 @@ class ServerlessSumologicPlugin {
     this.config = getConfig({ serverless, options });
 
     this.logger = {
-      log: msg => this.serverless.cli.log(format(this.config.prefix, msg)),
+      log: msg => this.serverless.cli.log(format('Sumologic:', msg)),
     };
 
     this.cloudformation = Cloudformation({

@@ -2,7 +2,6 @@ const get = require('lodash.get');
 
 const defaults = {
   includeLogGroupInfo: false,
-  prefix: 'Sumologic:',
 };
 
 const getConfig = ({ serverless, options }) => {

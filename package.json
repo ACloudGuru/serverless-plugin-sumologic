@@ -32,10 +32,7 @@
     "lodash.get": "^4.4.2"
   },
   "jest": {
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/src/MockPluginFactory.js",
-      "<rootDir>/node_modules/"
-    ],
+    "clearMocks": true,
     "coverageThreshold": {
       "global": {
         "statements": 95,

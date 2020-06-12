@@ -23,7 +23,6 @@ describe('#getConfig', () => {
       includeLogGroupInfo: false,
       name: 'sumologic-logs-my-service',
       region: 'east',
-      prefix: 'Sumologic:',
       stage: 'test',
     });
   });
@@ -52,7 +51,6 @@ describe('#getConfig', () => {
       ...userConfig,
       stage: 'test',
       name: 'sumologic-logs-my-service',
-      prefix: 'Sumologic:',
       region: 'east',
     });
   });
@@ -64,7 +62,8 @@ describe('#getConfig', () => {
   });
 
   it('should throw error if region is undefined', () => {
-    const config = () => getConfig({ serverless: {}, options: { stage: 'test' } });
+    const config = () =>
+      getConfig({ serverless: {}, options: { stage: 'test' } });
 
     expect(config).toThrow(new Error('Serverless "region" is missing'));
   });
