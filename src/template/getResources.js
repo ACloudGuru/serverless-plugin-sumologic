@@ -1,4 +1,4 @@
-const getResources = ({ name, stage }) => ({
+const getResources = ({ name, stage, prefix }) => ({
   SumoCWLogGroup: {
     Type: 'AWS::Logs::LogGroup',
     Properties: {

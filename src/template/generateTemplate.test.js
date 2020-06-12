@@ -11,7 +11,7 @@ const { Parameters } = require('./parameters');
 describe('#getConfig', () => {
   it('should generate cloudformation template', () => {
     mockGetResources.mockReturnValue('resources');
-    const config = { stage: 'test' };
+    const config = { stage: 'test', name: 'my-stack' };
     const template = generateTemplate({ config });
 
     expect(template).toEqual({
@@ -23,6 +23,10 @@ describe('#getConfig', () => {
       Resources: 'resources',
       Outputs,
     });
-    expect(mockGetResources).toHaveBeenCalledWith({ stage: 'test' });
+    expect(mockGetResources).toHaveBeenCalledWith({
+      stage: 'test',
+      name: 'my-stack',
+      prefix: 'MyStack',
+    });
   });
 });
