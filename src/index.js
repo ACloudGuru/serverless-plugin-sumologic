@@ -33,11 +33,12 @@ class ServerlessSumologicPlugin {
     };
 
     this.hooks = {
-      'before:deploy:deploy': this.beforeDeploy.bind(this),
+      'deploy:sumologic:deploy': this.deploy.bind(this),
+      'before:deploy:deploy': this.deploy.bind(this),
     };
   }
 
-  beforeDeploy() {
+  deploy() {
     return Promise.resolve()
       .then(() => this.validate())
       .then(() => this.logger.log(MESSAGE.CLI_START))
