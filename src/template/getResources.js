@@ -1,5 +1,5 @@
 const getResources = ({ name, stage, prefix }) => ({
-  SumoCWLogGroup: {
+  [`${prefix}SumoCWLogGroup`]: {
     Type: 'AWS::Logs::LogGroup',
     Properties: {
       LogGroupName: 'SumoCWLogGroup',
