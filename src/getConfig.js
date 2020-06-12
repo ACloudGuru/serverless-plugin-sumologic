@@ -6,10 +6,16 @@ const defaults = {
 };
 
 const getConfig = ({ serverless, options }) => {
-  const stage = get(options, 'stage') || get(serverless, 'service.provider.stage');
-  const region = get(options, 'region') || get(serverless, 'service.provider.region');
+  const stage =
+    get(options, 'stage') || get(serverless, 'service.provider.stage');
 
-  const name = `sumologic-logs-${get(serverless, 'service.custom.sumologic.name')}`;
+  const region =
+    get(options, 'region') || get(serverless, 'service.provider.region');
+
+  const name = `sumologic-logs-${get(
+    serverless,
+    'service.custom.sumologic.name'
+  )}`;
 
   if (!stage) {
     throw new Error('Serverless "stage" is missing');
