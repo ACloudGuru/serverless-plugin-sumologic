@@ -1,16 +1,16 @@
 const mockGetResources = jest.fn();
-jest.mock('./getResources', () => ({
-  getResources: mockGetResources,
-}));
+const mockGetOutputs = jest.fn();
+jest.mock('./getResources', () => ({ getResources: mockGetResources }));
+jest.mock('./getOutputs', () => ({ getOutputs: mockGetOutputs }));
 
 const { generateTemplate } = require('./generateTemplate');
 const { Mappings } = require('./mappings');
-const { Outputs } = require('./outputs');
 const { Parameters } = require('./parameters');
 
 describe('#getConfig', () => {
   it('should generate cloudformation template', () => {
     mockGetResources.mockReturnValue('resources');
+    mockGetOutputs.mockReturnValue('outputs');
     const config = { stage: 'test', name: 'my-stack' };
     const template = generateTemplate({ config });
 
@@ -21,8 +21,9 @@ describe('#getConfig', () => {
       Parameters,
       Mappings,
       Resources: 'resources',
-      Outputs,
+      Outputs: 'outputs',
     });
+    expect(mockGetOutputs).toHaveBeenCalledWith({ prefix: 'MyStack' });
     expect(mockGetResources).toHaveBeenCalledWith({
       stage: 'test',
       name: 'my-stack',

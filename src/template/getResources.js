@@ -2,28 +2,32 @@ const getResources = ({ name, stage, prefix }) => ({
   [`${prefix}SumoCWLogGroup`]: {
     Type: 'AWS::Logs::LogGroup',
     Properties: {
-      LogGroupName: 'SumoCWLogGroup',
+      LogGroupName: `${prefix}SumoCWLogGroup`,
       RetentionInDays: 7,
     },
   },
-  SumoCWLogSubsriptionFilter: {
+  [`${prefix}SumoCWLogSubsriptionFilter`]: {
     Type: 'AWS::Logs::SubscriptionFilter',
     Properties: {
       LogGroupName: {
-        Ref: 'SumoCWLogGroup',
+        Ref: `${prefix}SumoCWLogGroup`,
       },
       DestinationArn: {
-        'Fn::GetAtt': ['SumoCWLogsLambda', 'Arn'],
+        'Fn::GetAtt': [`${prefix}SumoCWLogsLambda`, 'Arn'],
       },
       FilterPattern: '',
     },
-    DependsOn: ['SumoCWLogGroup', 'SumoCWLambdaPermission', 'SumoCWLogsLambda'],
+    DependsOn: [
+      `${prefix}SumoCWLogGroup`,
+      `${prefix}SumoCWLambdaPermission`,
+      `${prefix}SumoCWLogsLambda`,
+    ],
   },
-  SumoCWLambdaPermission: {
+  [`${prefix}SumoCWLambdaPermission`]: {
     Type: 'AWS::Lambda::Permission',
     Properties: {
       FunctionName: {
-        'Fn::GetAtt': ['SumoCWLogsLambda', 'Arn'],
+        'Fn::GetAtt': [`${prefix}SumoCWLogsLambda`, 'Arn'],
       },
       Action: 'lambda:InvokeFunction',
       Principal: {
@@ -43,13 +47,13 @@ const getResources = ({ name, stage, prefix }) => ({
       },
     },
   },
-  SumoCWDeadLetterQueue: {
+  [`${prefix}SumoCWDeadLetterQueue`]: {
     Type: 'AWS::SQS::Queue',
     Properties: {
-      QueueName: 'SumoCWDeadLetterQueue',
+      QueueName: `${prefix}SumoCWDeadLetterQueue`,
     },
   },
-  SumoCWLambdaExecutionRole: {
+  [`${prefix}SumoCWLambdaExecutionRole`]: {
     Type: 'AWS::IAM::Role',
     Properties: {
       AssumeRolePolicyDocument: {
@@ -93,7 +97,7 @@ const getResources = ({ name, stage, prefix }) => ({
                 ],
                 Resource: [
                   {
-                    'Fn::GetAtt': ['SumoCWDeadLetterQueue', 'Arn'],
+                    'Fn::GetAtt': [`${prefix}SumoCWDeadLetterQueue`, 'Arn'],
                   },
                 ],
               },
@@ -160,7 +164,7 @@ const getResources = ({ name, stage, prefix }) => ({
                           Ref: 'AWS::AccountId',
                         },
                         'function',
-                        'SumoCWProcessDLQLambda',
+                        `${prefix}SumoCWProcessDLQLambda`,
                       ],
                     ],
                   },
@@ -172,12 +176,15 @@ const getResources = ({ name, stage, prefix }) => ({
       ],
     },
   },
-  SumoCWLogsLambda: {
+  [`${prefix}SumoCWLogsLambda`]: {
     Type: 'AWS::Lambda::Function',
-    DependsOn: ['SumoCWLambdaExecutionRole', 'SumoCWDeadLetterQueue'],
+    DependsOn: [
+      `${prefix}SumoCWLambdaExecutionRole`,
+      `${prefix}SumoCWDeadLetterQueue`,
+    ],
     Properties: {
       FunctionName: {
-        'Fn::Sub': `sumologic-${name}-${stage}`,
+        'Fn::Sub': `${name}-sumologic-${stage}`,
       },
       Code: {
         S3Bucket: {
@@ -192,12 +199,12 @@ const getResources = ({ name, stage, prefix }) => ({
         S3Key: 'cloudwatchlogs-with-dlq.zip',
       },
       Role: {
-        'Fn::GetAtt': ['SumoCWLambdaExecutionRole', 'Arn'],
+        'Fn::GetAtt': [`${prefix}SumoCWLambdaExecutionRole`, 'Arn'],
       },
       Timeout: 300,
       DeadLetterConfig: {
         TargetArn: {
-          'Fn::GetAtt': ['SumoCWDeadLetterQueue', 'Arn'],
+          'Fn::GetAtt': [`${prefix}SumoCWDeadLetterQueue`, 'Arn'],
         },
       },
       Handler: 'cloudwatchlogs_lambda.handler',
@@ -216,20 +223,20 @@ const getResources = ({ name, stage, prefix }) => ({
       },
     },
   },
-  SumoCWEventsInvokeLambdaPermission: {
+  [`${prefix}SumoCWEventsInvokeLambdaPermission`]: {
     Type: 'AWS::Lambda::Permission',
     Properties: {
       FunctionName: {
-        Ref: 'SumoCWProcessDLQLambda',
+        Ref: `${prefix}SumoCWProcessDLQLambda`,
       },
       Action: 'lambda:InvokeFunction',
       Principal: 'events.amazonaws.com',
       SourceArn: {
-        'Fn::GetAtt': ['SumoCWProcessDLQScheduleRule', 'Arn'],
+        'Fn::GetAtt': [`${prefix}SumoCWProcessDLQScheduleRule`, 'Arn'],
       },
     },
   },
-  SumoCWProcessDLQScheduleRule: {
+  [`${prefix}SumoCWProcessDLQScheduleRule`]: {
     Type: 'AWS::Events::Rule',
     Properties: {
       Description: 'Events rule for Cron',
@@ -238,19 +245,22 @@ const getResources = ({ name, stage, prefix }) => ({
       Targets: [
         {
           Arn: {
-            'Fn::GetAtt': ['SumoCWProcessDLQLambda', 'Arn'],
+            'Fn::GetAtt': [`${prefix}SumoCWProcessDLQLambda`, 'Arn'],
           },
           Id: 'TargetFunctionV1',
         },
       ],
     },
   },
-  SumoCWProcessDLQLambda: {
+  [`${prefix}SumoCWProcessDLQLambda`]: {
     Type: 'AWS::Lambda::Function',
-    DependsOn: ['SumoCWLambdaExecutionRole', 'SumoCWDeadLetterQueue'],
+    DependsOn: [
+      `${prefix}SumoCWLambdaExecutionRole`,
+      `${prefix}SumoCWDeadLetterQueue`,
+    ],
     Properties: {
       FunctionName: {
-        'Fn::Sub': `sumologic-DLQ-${name}-${stage}`,
+        'Fn::Sub': `${name}-sumologic-DLQ-${stage}`,
       },
       Code: {
         S3Bucket: {
@@ -265,13 +275,13 @@ const getResources = ({ name, stage, prefix }) => ({
         S3Key: 'cloudwatchlogs-with-dlq.zip',
       },
       Role: {
-        'Fn::GetAtt': ['SumoCWLambdaExecutionRole', 'Arn'],
+        'Fn::GetAtt': [`${prefix}SumoCWLambdaExecutionRole`, 'Arn'],
       },
       Timeout: 300,
       Handler: 'DLQProcessor.handler',
       DeadLetterConfig: {
         TargetArn: {
-          'Fn::GetAtt': ['SumoCWDeadLetterQueue', 'Arn'],
+          'Fn::GetAtt': [`${prefix}SumoCWDeadLetterQueue`, 'Arn'],
         },
       },
       Runtime: 'nodejs12.x',
@@ -295,7 +305,7 @@ const getResources = ({ name, stage, prefix }) => ({
                 },
                 '/',
                 {
-                  'Fn::GetAtt': ['SumoCWDeadLetterQueue', 'QueueName'],
+                  'Fn::GetAtt': [`${prefix}SumoCWDeadLetterQueue`, 'QueueName'],
                 },
               ],
             ],
