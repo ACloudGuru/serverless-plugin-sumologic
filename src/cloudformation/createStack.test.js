@@ -1,12 +1,9 @@
-const mockWaitForStack = jest.fn();
-
-jest.mock('./waitForStack', () => ({
-  waitForStack: mockWaitForStack,
-}));
-
 const { createStack } = require('./createStack');
 
+const waitForStack = jest.fn();
+
 const request = jest.fn();
+const provider = { request };
 
 const params = {
   StackName: 'stack-name',
@@ -14,10 +11,11 @@ const params = {
 
 describe('#createStack', () => {
   it('should create the stack', async () => {
-    mockWaitForStack.mockResolvedValue('response');
+    waitForStack.mockResolvedValue('response');
     request.mockResolvedValue();
-    const stack = await createStack({
-      request,
+    const create = createStack({ provider, waitForStack });
+
+    const stack = await create({
       params,
       region: 'east',
     });
@@ -29,8 +27,7 @@ describe('#createStack', () => {
       { ...params, OnFailure: 'DELETE' },
       { region: 'east' }
     );
-    expect(mockWaitForStack).toHaveBeenCalledWith({
-      request,
+    expect(waitForStack).toHaveBeenCalledWith({
       name: 'stack-name',
       region: 'east',
     });
