@@ -5,6 +5,7 @@ const defaults = {
 };
 
 const getConfig = ({ serverless, options }) => {
+  console.log('hello');
   const stage =
     get(options, 'stage') || get(serverless, 'service.provider.stage');
 
