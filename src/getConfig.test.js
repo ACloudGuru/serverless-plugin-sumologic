@@ -21,7 +21,7 @@ describe('#getConfig', () => {
     expect(config).toEqual({
       endpointUrl: userConfig.endpointUrl,
       includeLogGroupInfo: false,
-      name: 'sumologic-logs-my-service',
+      name: 'sumologic-my-service-test',
       region: 'east',
       stage: 'test',
     });
@@ -50,7 +50,7 @@ describe('#getConfig', () => {
     expect(config).toEqual({
       ...userConfig,
       stage: 'test',
-      name: 'sumologic-logs-my-service',
+      name: 'sumologic-my-service-test',
       region: 'east',
     });
   });

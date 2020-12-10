@@ -70,7 +70,7 @@ describe('#SumologicPlugin', () => {
         config: {
           endpointUrl: 'endpoint-url',
           includeLogGroupInfo: false,
-          name: 'sumologic-logs-stack-name',
+          name: 'sumologic-stack-name-test',
           region: 'east',
           stage: 'test',
         },
@@ -85,7 +85,7 @@ describe('#SumologicPlugin', () => {
         config: {
           endpointUrl: 'endpoint-url',
           includeLogGroupInfo: false,
-          name: 'sumologic-logs-stack-name',
+          name: 'sumologic-stack-name-test',
           region: 'east',
           stage: 'test',
         },
