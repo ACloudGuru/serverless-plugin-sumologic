@@ -208,7 +208,7 @@ const getResources = ({ name, stage, prefix }) => ({
         },
       },
       Handler: 'cloudwatchlogs_lambda.handler',
-      Runtime: 'nodejs12.x',
+      Runtime: 'nodejs16.x',
       MemorySize: 128,
       Environment: {
         Variables: {
@@ -284,7 +284,7 @@ const getResources = ({ name, stage, prefix }) => ({
           'Fn::GetAtt': [`${prefix}SumoCWDeadLetterQueue`, 'Arn'],
         },
       },
-      Runtime: 'nodejs12.x',
+      Runtime: 'nodejs16.x',
       MemorySize: 128,
       Environment: {
         Variables: {
