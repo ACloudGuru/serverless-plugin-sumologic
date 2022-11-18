@@ -301,7 +301,7 @@
                     }
                 },
                 "Handler": "cloudwatchlogs_lambda.handler",
-                "Runtime": "nodejs12.x",
+                "Runtime": "nodejs16.x",
                 "MemorySize": 128,
                 "Environment": {
                     "Variables": {
@@ -389,7 +389,7 @@
                         ]
                     }
                 },
-                "Runtime": "nodejs12.x",
+                "Runtime": "nodejs16.x",
                 "MemorySize": 128,
                 "Environment": {
                     "Variables": {

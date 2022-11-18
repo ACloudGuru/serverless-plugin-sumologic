@@ -43,10 +43,10 @@ Run `yarn sls deploy sumologic` to deploy just the sumologic stack without deplo
 ## Example Serverless Configuration
 ```
 service: serverless-example
-frameworkVersion: ">=1.11.0 <2.0.0"
+frameworkVersion: ">=3.23.0 <4.0.0"
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   region: us-east-1
 
 plugins:
