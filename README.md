@@ -3,7 +3,10 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c8bbbf42fe0458bbf81f6c3f9f59895)](https://www.codacy.com/gh/ACloudGuru/serverless-plugin-sumologic?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/serverless-plugin-sumologic&amp;utm_campaign=Badge_Grade)
 [![Npm Version](https://img.shields.io/npm/v/serverless-plugin-sumologic.svg)](https://www.npmjs.com/package/serverless-plugin-sumologic)
 
-# 📋 Serverless Plugin Alert
+# 📋 [DEPRECATED] Sumo Logic Logs Serverless Plugin
+
+> **Warning**
+> This approach has been superceeded by [the official Sumo Logic plugin](https://www.sumologic.com/blog/lambda-extensions/) and is no longer recommended. This package is no longer maintained.
 
 This Serverless plugin deploys Cloudformation Stack with resources required to send Cloudformation Logs to Sumologic. This stack uses AWS Lambda to subscribe to your CloudWatch Log Group and POSTs the log data directly to Sumo HTTP Source. 
 
