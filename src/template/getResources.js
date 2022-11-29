@@ -184,7 +184,7 @@ const getResources = ({ name, stage, prefix }) => ({
     ],
     Properties: {
       FunctionName: {
-        'Fn::Sub': name,
+        'Fn::Sub': `${name}-sumologic-${stage}`,
       },
       Code: {
         S3Bucket: {

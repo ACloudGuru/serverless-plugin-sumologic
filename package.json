@@ -1,5 +1,5 @@
 {
-  "name": "serverless-plugin-sumologic",
+  "name": "@a-cloud-guru/serverless-plugin-sumologic",
   "version": "2.0.1",
   "description": "Serverless plugin to create sumologic stack",
   "main": "src/index.js",
